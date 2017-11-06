@@ -10,7 +10,7 @@ of October 2017. It requires that you have Java installed.
 
 
 
-Need help? E-mail us -- support atsymbol bigbrassband period com. 
+Need help? E-mail us -- support@bigbrassband.com 
 
 The utility looks at all sales and refunds for the period in the PDF cross
 referenced against that time period in the JSON file.
@@ -92,7 +92,7 @@ this command:
 have.*
 
  
-If you found this utility helpful, please give us a star.
+**If you found this utility helpful, please give us a star.**
  
 
  
