@@ -18,7 +18,7 @@ referenced against that time period in the JSON file.
 Any unmatched rows are printed:
 
 1.  Sales listed in the JSON file that are not matched in the PDF. Manually
-    check to see if this are sales for which you were not paid.
+    check to see if these are sales for which you were not paid.
 
 2.  Sales listed in the PDF file that are not matched in the JSON file. Manually
     check to see if these are sales you have not really made and should not have
@@ -29,7 +29,7 @@ Any unmatched rows are printed:
     the remittance but appear they should have.
 
 4.  Refunds listed in the PDF that are not matched in the JSON. Manually check
-    to see if there se are refunds that Atlassian has taken out of the
+    to see if these are refunds that Atlassian has taken out of the
     remittance but perhaps should not have.
 
  
