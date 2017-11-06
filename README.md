@@ -92,7 +92,7 @@ this command:
 have.*
 
  
-
+If you found this utility helpful, please give us a star.
  
 
  
