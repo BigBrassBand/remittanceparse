@@ -84,8 +84,7 @@ here](https://github.com/BigBrassBand/remittanceparse/raw/master/remittanceparse
 **Step 4.** From a command line in the directory where are the files are, run
 this command:
 
-`java -Xmx1G -jar remittanceparse.jar "2017-10-Bill Payment_00001234_2.pdf"
-transactions-123456-20171106T115952Z.json`
+`java -Xmx1G -jar remittanceparse.jar "2017-10-Bill Payment_00001234_2.pdf" transactions-123456-20171106T115952Z.json`
 
 *Update the filenames of the PDF and JSON files to match the filenames you
 have.*
