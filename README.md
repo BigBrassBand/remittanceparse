@@ -1,14 +1,16 @@
 Atlassian Marketplace Remittance Reconciliation Utility
 =======================================================
 
-*Copyright 2017 BigBrassBand LLC*
+*Copyright 2017 [BigBrassBand LLC](https://marketplace.atlassian.com/plugins/com.xiplink.jira.git.jira_git_plugin/cloud/overview)*
 
 This utility compares an Atlassian remittance report PDF with a transactions
 JSON file and prints differences found. The remittance report PDF has had some
 format changes over the years --- this utility works with the latest format as
 of October 2017. It requires that you have Java installed.
 
- 
+
+
+Need help? E-mail us -- support atsymbol bigbrassband period com. 
 
 The utility looks at all sales and refunds for the period in the PDF cross
 referenced against that time period in the JSON file.
