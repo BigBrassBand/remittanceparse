@@ -79,7 +79,7 @@ the same directory as the JSON file.
 
 **Step 3.** Save the *remittanceparse.jar* file into the same directory as the
 JSON file and PDF. The remittanceparse.jar file can be [downloaded
-here](https://github.com/BigBrassBand/remittanceparse/blob/master/remittanceparse.jar).
+here](https://github.com/BigBrassBand/remittanceparse/raw/master/remittanceparse.jar).
 
 **Step 4.** From a command line in the directory where are the files are, run
 this command:
