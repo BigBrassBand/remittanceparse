@@ -11,11 +11,15 @@ import com.bigbrassband.util.remittanceparse.transaction.Transactions;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Paths;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 
 public class Main {
@@ -27,24 +31,20 @@ public class Main {
             System.exit(1);
         }
 
-        ArrayList<RemittanceLine> lines=new ArrayList<>();
-
-        DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setIncludes(new String[]{args[0]});
-        scanner.setCaseSensitive(false);
-        scanner.scan();
-        String[] files = scanner.getIncludedFiles();
-        Arrays.sort(files);
-        if(files.length==0)
+        ArrayList<File> files=new ArrayList<>();
+        scanForFiles(files,args[0]);
+        files.sort(Comparator.comparing(File::toString));
+        if(files.isEmpty())
         {
             System.err.println("No PDF files found.");
             System.exit(1);
         }
 
+        ArrayList<RemittanceLine> lines=new ArrayList<>();
         Date minimumDate=null, maximumDate=null;
-        for (String file : files) {
+        for (File file : files) {
             System.err.println("Processing PDF " + file);
-            RemittancePdf remittancePdf=new RemittancePdf(new File(file));
+            RemittancePdf remittancePdf=new RemittancePdf(file);
             remittancePdf.parseRemittancePdf(lines);
 
             //Remittance PDF date covers the previous month
@@ -67,6 +67,28 @@ public class Main {
 
 
         report(lines, transactions, minimumDate, maximumDate);
+    }
+
+    private static void scanForFiles(Collection<File> destination, String pathAndMask) {
+        DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setCaseSensitive(false);
+
+        String pathPart = FilenameUtils.getFullPath(pathAndMask);
+        if(StringUtils.isEmpty(pathPart))
+        {
+            scanner.setBasedir(Paths.get(".").toAbsolutePath().normalize().toFile());
+            scanner.setIncludes(new String[]{pathAndMask});
+        }
+        else
+        {
+            scanner.setBasedir(new File(pathPart));
+            scanner.setIncludes(new String[]{FilenameUtils.getName(pathAndMask)});
+        }
+
+        scanner.scan();
+        for (String file : scanner.getIncludedFiles()) {
+            destination.add(new File(scanner.getBasedir(),file));
+        }
     }
 
     private static void report(ArrayList<RemittanceLine> lines, Transactions transactions, Date minimumDate, Date maximumDate) throws UnsupportedEncodingException {
