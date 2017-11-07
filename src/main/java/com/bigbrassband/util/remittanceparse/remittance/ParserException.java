@@ -13,6 +13,14 @@ public class ParserException extends Exception {
         super(buildMessage(remittanceParser, message));
     }
 
+    ParserException(String message) {
+        super(message);
+    }
+
+    ParserException(String message, Throwable t) {
+        super(message,t);
+    }
+
     private static String buildMessage(RemittanceParser remittanceParser, String message) {
         StringBuilder builder = new StringBuilder();
         if (!StringUtils.isEmpty(message))

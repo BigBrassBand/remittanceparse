@@ -62,7 +62,7 @@ public class RefundMatcher
         print.println("4. Remittance Report PDF Refunds Missing from Transactions API (heuristic*):");
         for (ArrayList<RemittanceLine> lines : remittanceLines.values()) {
             for (RemittanceLine remittanceLine : lines) {
-                print.println("\t" + Format.dateFormatterAfterJune2017.format(remittanceLine.getDate()) + "\t" + remittanceLine.getReference() + "\t" + remittanceLine.getPaidString());
+                print.println("\t" + Format.usDateFormatter.format(remittanceLine.getDate()) + "\t" + remittanceLine.getReference() + "\t" + remittanceLine.getPaidString());
                 refundMatcherHelperTotalPennies.add(remittanceLine.getPaidPennies());
             }
         }

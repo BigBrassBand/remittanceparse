@@ -10,6 +10,8 @@ import com.bigbrassband.util.remittanceparse.transaction.Transactions;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -33,24 +35,41 @@ public class Main {
         scanner.scan();
         String[] files = scanner.getIncludedFiles();
         Arrays.sort(files);
-        for (String file : files) {
-                System.err.println("Processing PDF " + file);
-                new RemittancePdf(new File(file), lines);
+        if(files.length==0)
+        {
+            System.err.println("No PDF files found.");
+            System.exit(1);
         }
 
         Date minimumDate=null, maximumDate=null;
-        for (RemittanceLine line : lines) {
-            final Date date = line.getDate();
-            if (minimumDate == null || date.before(minimumDate))
-                minimumDate = date;
-            if (maximumDate == null || date.after(maximumDate))
-                maximumDate = date;
+        for (String file : files) {
+            System.err.println("Processing PDF " + file);
+            RemittancePdf remittancePdf=new RemittancePdf(new File(file));
+            remittancePdf.parseRemittancePdf(lines);
+
+            //Remittance PDF date covers the previous month
+            final YearMonth yearMonth = YearMonth.from(
+                    Format.asLocalDate(remittancePdf.getRemittanceDate())).minusMonths(1);
+
+            Date firstDay=Format.asDate(yearMonth.atDay(1));
+            Date lastDay=Format.asDate(yearMonth.atEndOfMonth());
+
+            if(minimumDate==null || firstDay.before(minimumDate))
+                minimumDate=firstDay;
+
+            if(maximumDate==null || lastDay.after(maximumDate))
+                maximumDate=lastDay;
         }
 
-        System.err.println("Processing PDF " + args[1]);
+        System.err.println("Processing transactions JSON " + args[1]);
         Transactions transactions = new Transactions(new File(args[1]),
                 minimumDate, maximumDate);
 
+
+        report(lines, transactions, minimumDate, maximumDate);
+    }
+
+    private static void report(ArrayList<RemittanceLine> lines, Transactions transactions, Date minimumDate, Date maximumDate) throws UnsupportedEncodingException {
         //Pass through the transactions API haystack
         RemittancePdfSalesMissingFromTransactionApiSales pdfSalesMissing =
                 new RemittancePdfSalesMissingFromTransactionApiSales();
@@ -66,8 +85,8 @@ public class Main {
 
         //Print the report
         System.out.println("Reconciliation for " +
-                Format.dateFormatterAfterJune2017.format(minimumDate) + " - " +
-                Format.dateFormatterAfterJune2017.format(maximumDate));
+                Format.usDateFormatter.format(minimumDate) + " - " +
+                Format.usDateFormatter.format(maximumDate));
         System.out.println();
 
         System.out.println(transactionApiSalesMissing.toString());
