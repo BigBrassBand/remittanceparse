@@ -1,6 +1,7 @@
 package com.bigbrassband.util.remittanceparse;
 
 import com.bigbrassband.util.remittanceparse.remittance.ParserException;
+import com.bigbrassband.util.remittanceparse.remittance.RemittanceLine;
 import com.bigbrassband.util.remittanceparse.remittance.RemittancePdf;
 import com.bigbrassband.util.remittanceparse.report.RemittancePdfSalesMissingFromTransactionApiSales;
 import com.bigbrassband.util.remittanceparse.report.TransactionApiSalesMissingFromRemittancePdf;
@@ -9,6 +10,11 @@ import com.bigbrassband.util.remittanceparse.transaction.Transactions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import org.apache.tools.ant.DirectoryScanner;
 
 public class Main {
 
@@ -19,28 +25,49 @@ public class Main {
             System.exit(1);
         }
 
-        //parse the remittance PDF and transactions JSON
-        RemittancePdf remittancePdf = new RemittancePdf(new File(args[0]));
+        ArrayList<RemittanceLine> lines=new ArrayList<>();
+
+        DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setIncludes(new String[]{args[0]});
+        scanner.setCaseSensitive(false);
+        scanner.scan();
+        String[] files = scanner.getIncludedFiles();
+        Arrays.sort(files);
+        for (String file : files) {
+                System.err.println("Processing PDF " + file);
+                new RemittancePdf(new File(file), lines);
+        }
+
+        Date minimumDate=null, maximumDate=null;
+        for (RemittanceLine line : lines) {
+            final Date date = line.getDate();
+            if (minimumDate == null || date.before(minimumDate))
+                minimumDate = date;
+            if (maximumDate == null || date.after(maximumDate))
+                maximumDate = date;
+        }
+
+        System.err.println("Processing PDF " + args[1]);
         Transactions transactions = new Transactions(new File(args[1]),
-                remittancePdf.getMinimumDate(), remittancePdf.getMaximumDate());
+                minimumDate, maximumDate);
 
         //Pass through the transactions API haystack
         RemittancePdfSalesMissingFromTransactionApiSales pdfSalesMissing =
                 new RemittancePdfSalesMissingFromTransactionApiSales();
         RefundMatcher refundMatcher = new RefundMatcher();
-        Keyed.haystackSearch(remittancePdf.getLines(), transactions.getTransactions(),
+        Keyed.haystackSearch(lines, transactions.getTransactions(),
                 pdfSalesMissing, refundMatcher.getRefundMatcherHelper());
 
         //Pass through the remittance PDF haystack
         TransactionApiSalesMissingFromRemittancePdf transactionApiSalesMissing =
                 new TransactionApiSalesMissingFromRemittancePdf();
-        Keyed.haystackSearch(transactions.getTransactions(), remittancePdf.getLines(),
+        Keyed.haystackSearch(transactions.getTransactions(), lines,
                 transactionApiSalesMissing, refundMatcher);
 
         //Print the report
         System.out.println("Reconciliation for " +
-                Format.dateFormatter.format(remittancePdf.getMinimumDate()) + " - " +
-                Format.dateFormatter.format(remittancePdf.getMaximumDate()));
+                Format.dateFormatterAfterJune2017.format(minimumDate) + " - " +
+                Format.dateFormatterAfterJune2017.format(maximumDate));
         System.out.println();
 
         System.out.println(transactionApiSalesMissing.toString());

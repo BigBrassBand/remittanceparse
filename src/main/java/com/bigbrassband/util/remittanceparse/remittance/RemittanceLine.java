@@ -5,6 +5,7 @@ import com.bigbrassband.util.remittanceparse.Keyed;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -21,13 +22,13 @@ public class RemittanceLine extends Keyed {
     private final long paidPennies;
     private final String id;
 
-    RemittanceLine(ArrayList<String> fields) throws ParseException {
+    RemittanceLine(ArrayList<String> fields, SimpleDateFormat dateParser) throws ParseException {
         final Matcher matcher = referencePattern.matcher(fields.get(1));
         if (!matcher.matches())
             throw new ParseException("Can not parse reference field: " + fields.get(1) + ".", 0);
         id = matcher.group(1);
 
-        date = Format.dateFormatter.parse(fields.get(0));
+        date = dateParser.parse(fields.get(0));
         reference = fields.get(1);
         description.append(fields.get(2));
         amountPennies = parsePennies(fields.get(3));

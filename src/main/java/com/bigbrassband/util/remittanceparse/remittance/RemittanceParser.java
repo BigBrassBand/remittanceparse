@@ -3,15 +3,18 @@ package com.bigbrassband.util.remittanceparse.remittance;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 class RemittanceParser {
     private final ArrayList<RemittanceLine> remittanceLines;
+    private final SimpleDateFormat dateParser;
     private int pageCount = 0;
     private String currentLine;
 
-    RemittanceParser(ArrayList<RemittanceLine> remittanceLines) {
+    RemittanceParser(ArrayList<RemittanceLine> remittanceLines, SimpleDateFormat dateParser) {
         this.remittanceLines = remittanceLines;
+        this.dateParser=dateParser;
     }
 
     void newLine(String line) throws ParserException {
@@ -31,7 +34,7 @@ class RemittanceParser {
 
             case detail:
                 try {
-                    remittanceLines.add(new RemittanceLine(fields));
+                    remittanceLines.add(new RemittanceLine(fields,dateParser));
                 } catch (ParseException e) {
                     throw new ParserException(this, e);
                 }
