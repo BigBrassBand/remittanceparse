@@ -89,7 +89,7 @@ this command:
 `java -Xmx1G -jar remittanceparse.jar "2017-10-Bill Payment_00001234_2.pdf" transactions-123456-20171106T115952Z.json`
 
 *Update the filenames of the PDF and JSON files to match the filenames you
-have.*
+have.* Wildcards for the PDF filename are supported (*.pdf).
 
  
 **If you found this utility helpful, please give us a star.**
