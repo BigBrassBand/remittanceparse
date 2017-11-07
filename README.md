@@ -1,14 +1,16 @@
 Atlassian Marketplace Remittance Reconciliation Utility
 =======================================================
 
-*Copyright 2017 BigBrassBand LLC*
+*Copyright 2017 [BigBrassBand LLC](https://marketplace.atlassian.com/vendors/1210545/bigbrassband)*
 
 This utility compares an Atlassian remittance report PDF with a transactions
 JSON file and prints differences found. The remittance report PDF has had some
 format changes over the years --- this utility works with the latest format as
 of October 2017. It requires that you have Java installed.
 
- 
+
+
+Need help? E-mail us -- support@bigbrassband.com 
 
 The utility looks at all sales and refunds for the period in the PDF cross
 referenced against that time period in the JSON file.
@@ -16,7 +18,7 @@ referenced against that time period in the JSON file.
 Any unmatched rows are printed:
 
 1.  Sales listed in the JSON file that are not matched in the PDF. Manually
-    check to see if this are sales for which you were not paid.
+    check to see if these are sales for which you were not paid.
 
 2.  Sales listed in the PDF file that are not matched in the JSON file. Manually
     check to see if these are sales you have not really made and should not have
@@ -27,7 +29,7 @@ Any unmatched rows are printed:
     the remittance but appear they should have.
 
 4.  Refunds listed in the PDF that are not matched in the JSON. Manually check
-    to see if there se are refunds that Atlassian has taken out of the
+    to see if these are refunds that Atlassian has taken out of the
     remittance but perhaps should not have.
 
  
@@ -79,19 +81,18 @@ the same directory as the JSON file.
 
 **Step 3.** Save the *remittanceparse.jar* file into the same directory as the
 JSON file and PDF. The remittanceparse.jar file can be [downloaded
-here](https://github.com/BigBrassBand/remittanceparse/blob/master/remittanceparse.jar).
+here](https://github.com/BigBrassBand/remittanceparse/raw/master/remittanceparse.jar).
 
 **Step 4.** From a command line in the directory where are the files are, run
 this command:
 
-`java -Xmx1G -jar remittanceparse.jar "2017-10-Bill Payment_00001234_2.pdf"
-transactions-123456-20171106T115952Z.json`
+`java -Xmx1G -jar remittanceparse.jar "2017-10-Bill Payment_00001234_2.pdf" transactions-123456-20171106T115952Z.json`
 
 *Update the filenames of the PDF and JSON files to match the filenames you
 have.*
 
  
-
+**If you found this utility helpful, please give us a star.**
  
 
  
