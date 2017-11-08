@@ -76,20 +76,19 @@ How to Use
 
 ![](transactions-api-json-download.gif)
 
-**Step 2.** Every month in e-mail you get a remittance PDF file. Place this in
-the same directory as the JSON file.
+**Step 2.** Every month in e-mail you get a remittance PDF file. Place this in the same directory as the JSON file.
 
-**Step 3.** Save the *remittanceparse.jar* file into the same directory as the
-JSON file and PDF. The remittanceparse.jar file can be [downloaded
-here](https://github.com/BigBrassBand/remittanceparse/raw/master/remittanceparse.jar).
+**Step 3.** Save the *remittanceparse.jar* file into the same directory as the JSON file and PDF. The remittanceparse.jar file can be [downloaded here](https://github.com/BigBrassBand/remittanceparse/raw/master/remittanceparse.jar).
 
-**Step 4.** From a command line in the directory where are the files are, run
-this command:
+**Step 4.** From a command line __in the same directory__, run this command:
 
 `java -Xmx1G -jar remittanceparse.jar "2017-10-Bill Payment_00001234_2.pdf" transactions-123456-20171106T115952Z.json`
 
-*Update the filenames of the PDF and JSON files to match the filenames you
-have.* Wildcards for the PDF filename are supported (*.pdf).
+*Update the filenames of the PDF and JSON files to match the filenames you have.* 
+
+Wildcards for the PDF filename are supported (*.pdf):
+
+`java -Xmx1G -jar remittanceparse.jar "2017-*.pdf" transactions-123456-20171106T115952Z.json`
 
  
 **If you found this utility helpful, please give us a star.**
